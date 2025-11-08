@@ -1,0 +1,43 @@
+﻿@model School_ErP.Models.Master_School
+
+<div class="modal-header bg-primary text-white py-2">
+    <h6 class="modal-title" style="color:ButtonHighlight"><i class="fa fa-eye"></i> School Details</h6>
+    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+</div>
+
+<div class="modal-body" style="font-size:13px;">
+    <div class="row mb-2">
+        <div class="col-5 fw-semibold text-secondary">School Code:</div>
+        <div class="col-7">@Model.SCode</div>
+    </div>
+    <div class="row mb-2">
+        <div class="col-5 fw-semibold text-secondary">School Name:</div>
+        <div class="col-7">@Model.SName</div>
+    </div>
+    <div class="row mb-2">
+        <div class="col-5 fw-semibold text-secondary">City:</div>
+        <div class="col-7">@Model.City</div>
+    </div>
+    <div class="row mb-2">
+        <div class="col-5 fw-semibold text-secondary">State:</div>
+        <div class="col-7">@Model.State</div>
+    </div>
+    <div class="row mb-2">
+        <div class="col-5 fw-semibold text-secondary">Phone:</div>
+        <div class="col-7">@Model.Phone</div>
+    </div>
+    <div class="row mb-2">
+        <div class="col-5 fw-semibold text-secondary">Email:</div>
+        <div class="col-7">@Model.Email</div>
+    </div>
+    <div class="row mb-1">
+        <div class="col-5 fw-semibold text-secondary">Address:</div>
+        <div class="col-7">@Model.Address</div>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">
+        <i class="fa fa-times"></i> Close
+    </button>
+</div>

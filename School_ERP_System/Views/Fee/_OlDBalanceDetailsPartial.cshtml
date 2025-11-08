@@ -1,0 +1,33 @@
+﻿@model School_ErP.Models.OldBalance
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<h5 class="mb-3">Old Balance Details</h5>
+			<table class="table table-bordered">
+				
+				<tr>
+					<th>Date</th>
+					<td>@Model.EDate</td>
+				</tr>
+				<tr>
+					<th>Reg No</th>
+					<td>@Model.RegNo</td>
+				</tr>
+				<tr>
+					<th>Amount</th>
+					<td>@Model.BalanceAmount</td>
+				</tr>
+				<tr>
+					<th>Old Session</th>
+					<td>@Model.B_Session</td>
+				</tr>
+				<tr>
+					<th>Remark</th>
+					<td>@Model.Remark</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+
+</div>

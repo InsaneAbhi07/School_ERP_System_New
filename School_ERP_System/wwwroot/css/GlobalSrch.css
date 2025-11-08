@@ -1,0 +1,116 @@
+﻿body {
+    background-color: #f4f6f9;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 14px;
+}
+
+.container {
+    max-width: 1200px;
+    margin-top: 15px;
+}
+
+h6 {
+    font-weight: 600;
+    color: #2f3e46;
+    margin-bottom: 0;
+}
+
+.btn-primary.btn-sm {
+    background: linear-gradient(90deg, #0061f2, #007bff);
+    border: none;
+    font-size: 13px;
+    padding: 6px 12px;
+    border-radius: 6px;
+}
+
+.card {
+    border: none;
+    border-radius: 10px;
+    background: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+}
+
+.card-body {
+    padding: 1rem 1.5rem;
+}
+
+/* ===== DataTable Header ===== */
+/* ===== Table Borders (ERP Style) ===== */
+table.dataTable {
+    border-collapse: collapse !important;
+    border: 1px solid #dee2e6 !important; /* outer border */
+}
+
+    table.dataTable thead th,
+    table.dataTable tbody td {
+        border: 1px solid #dee2e6 !important; /* inner gridlines */
+    }
+
+    table.dataTable thead th {
+        background-color: #eef3fa;
+        color: #1f2a37;
+        font-weight: 600;
+        font-size: 13px;
+        text-align: left;
+    }
+
+    table.dataTable tbody tr:hover {
+        background-color: #f7faff !important;
+        transition: background-color 0.2s ease-in-out;
+    }
+
+
+/* ===== Buttons ===== */
+.btn-sm {
+    padding: 4px 8px;
+    font-size: 12px;
+    border-radius: 6px;
+}
+
+/* ===== Pagination + Search ===== */
+.dataTables_wrapper .dataTables_length label,
+.dataTables_wrapper .dataTables_filter label {
+    font-size: 13px;
+    color: #6c757d;
+}
+
+.dataTables_wrapper .dataTables_length select {
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 13px;
+    width: 190px; /* Broadened dropdown */
+    min-width: 70px !important;
+}
+
+.dataTables_wrapper .dataTables_filter input {
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    padding: 5px 8px;
+    font-size: 13px;
+    width: 180px;
+}
+
+.dataTables_info {
+    font-size: 13px;
+    color: #6c757d;
+}
+
+.dataTables_paginate .paginate_button {
+    font-size: 12px;
+    padding: 3px 8px;
+    border-radius: 5px !important;
+    margin: 0 2px;
+    border: none !important;
+}
+
+    .dataTables_paginate .paginate_button.current {
+        background-color: #007bff !important;
+        color: white !important;
+        border: none !important;
+    }
+
+/* ===== Responsive Fix ===== */
+table.dataTable {
+    width: 100% !important;
+}

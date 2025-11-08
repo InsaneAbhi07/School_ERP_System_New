@@ -1,0 +1,447 @@
+﻿@model School_ErP.Models.Tbl_StRegistration
+
+@{
+    ViewData["Title"] = "Edit Student Registration";
+}
+
+<!-- ✅ Add Google Font & Bootstrap -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+    body {
+        background-color: #f8fafc;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    h3 {
+        font-weight: 600;
+        color: #2b3674;
+    }
+
+    .nav-tabs .nav-link {
+        font-weight: 500;
+        color: #555;
+        border-radius: 6px 6px 0 0;
+        transition: all 0.2s ease-in-out;
+    }
+
+        .nav-tabs .nav-link.active {
+            background-color: #2b3674;
+            color: #fff;
+            border: none;
+        }
+
+    .form-label {
+        font-weight: 500;
+        color: #333;
+    }
+
+    .form-control,
+    .form-select,
+    textarea {
+        border-radius: 10px;
+        border: 1px solid #ccc;
+        box-shadow: none;
+        transition: 0.2s ease-in-out;
+    }
+
+        .form-control:focus,
+        .form-select:focus,
+        textarea:focus {
+            border-color: #2b3674;
+            box-shadow: 0 0 0 0.2rem rgba(43, 54, 116, 0.2);
+        }
+
+    .shadow-card {
+        background: #fff;
+        border-radius: 15px;
+        padding: 2rem;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    }
+
+    .btn-success {
+        background-color: #2b3674;
+        border: none;
+        border-radius: 8px;
+        font-weight: 500;
+    }
+
+        .btn-success:hover {
+            background-color: #394694;
+        }
+
+    .btn-secondary {
+        border-radius: 8px;
+        font-weight: 500;
+    }
+
+    /* Small tab hover effect */
+    .nav-tabs .nav-link:hover {
+        background-color: #e6e9f5;
+    }
+
+    .tab-content {
+        border-radius: 0 0 10px 10px;
+    }
+</style>
+
+<div class="container my-5">
+    <a asp-action="StList" class="btn btn-primary btn-sm"> +Student List </a>
+
+    <div class="shadow-card">
+        <h3 class="text-center mb-4" style="color:darkorange">🎓Edit Student Registration Form</h3>
+        <input type="hidden" asp-for="Id" />
+        <form asp-action="EditRegistration" enctype="multipart/form-data">
+            <!-- Nav Tabs -->
+            <ul class="nav nav-tabs mb-3" id="studentTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="basic-tab" data-bs-toggle="tab" data-bs-target="#basic" type="button">Basic Info</button>
+                </li>
+                <li class="nav-item"><button class="nav-link" id="personal-tab" data-bs-toggle="tab" data-bs-target="#personal" type="button">Personal Info</button></li>
+                <li class="nav-item"><button class="nav-link" id="address-tab" data-bs-toggle="tab" data-bs-target="#address" type="button">Address Info</button></li>
+                <li class="nav-item"><button class="nav-link" id="academic-tab" data-bs-toggle="tab" data-bs-target="#academic" type="button">Previous Academic</button></li>
+                <li class="nav-item"><button class="nav-link" id="fee-tab" data-bs-toggle="tab" data-bs-target="#fee" type="button">Fee Info</button></li>
+                <li class="nav-item"><button class="nav-link" id="photo-tab" data-bs-toggle="tab" data-bs-target="#photo" type="button">Photos</button></li>
+            </ul>
+
+            <!-- Tab Contents -->
+            <div class="tab-content border p-4 bg-white rounded" id="studentTabContent">
+                <!-- BASIC INFO -->
+                <div class="tab-pane fade show active" id="basic" role="tabpanel">
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <label asp-for="FormNo" class="form-label">Form No</label>
+                            <input asp-for="FormNo" class="form-control" />
+                        </div>
+                        <div class="col-md-3">
+                            <label asp-for="RegNo" class="form-label">Reg No</label>
+                            <input asp-for="RegNo" class="form-control" />
+                        </div>
+                        <div class="col-md-3">
+                            <label asp-for="RollNo" class="form-label">Roll No</label>
+                            <input asp-for="RollNo" class="form-control" />
+                        </div>
+                        <div class="col-md-3">
+                            <label asp-for="AdmDate" class="form-label">Admission Date</label>
+                            <input asp-for="AdmDate" type="date" class="form-control" />
+                        </div>
+                        <div class="col-md-3">
+                            <label asp-for="APAARID" class="form-label">APAAR ID</label>
+                            <input asp-for="APAARID" class="form-control" />
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="AadharNo" class="form-label">Aadhar No.</label>
+                            <input asp-for="AadharNo" class="form-control" />
+                        </div>
+
+                        <div class="col-md-3">
+                            <label asp-for="AdmInClass" class="form-label">Admission In Class</label>
+                            <select asp-for="AdmInClass" class="form-select" asp-items="ViewBag.Classes">
+                                <option value="">-- Select Class --</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label asp-for="CurrentClass" class="form-label">Current Class</label>
+                            <select asp-for="CurrentClass" class="form-select" asp-items="ViewBag.Classes">
+                                <option value="">-- Select Class --</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label asp-for="Section" class="form-label">Section</label>
+                            <select asp-for="Section" class="form-select" asp-items="ViewBag.Sections">
+                                <option value="">-- Select Section --</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label asp-for="House" class="form-label">House</label>
+                            <select asp-for="House" class="form-select" asp-items="ViewBag.House">
+                                <option value="">-- Select House --</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label asp-for="Stream" class="form-label">Stream</label>
+                            <select asp-for="Stream" class="form-select">
+                                <option>PCM</option>
+                                <option>PCB</option>
+                                <option>COMMERCE</option>
+                                <option>ART</option>
+                            </select>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <!-- PERSONAL INFO -->
+                <div class="tab-pane fade" id="personal" role="tabpanel">
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <label asp-for="StudentName" class="form-label">Student Name</label>
+                            <input asp-for="StudentName" class="form-control" />
+                        </div>
+
+                        <div class="col-md-3">
+                            <label asp-for="Gender" class="form-label">Gender</label>
+                            <select asp-for="Gender" class="form-select">
+                                <option value="">Select</option>
+                                <option>Male</option>
+                                <option>Female</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label asp-for="DateOfBirth" class="form-label">Date of Birth</label>
+                            <input asp-for="DateOfBirth" type="date" class="form-control" id="dob" />
+                        </div>
+
+                        <div class="col-md-12 mt-2">
+                            <label asp-for="DOBInWords" class="form-label">Date of Birth (in Words)</label>
+                            <input asp-for="DOBInWords" type="text" class="form-control" id="dobWords" readonly />
+                        </div>
+
+
+                        <div class="col-md-6">
+                            <label asp-for="MotherName" class="form-label">Mother’s Name</label>
+                            <input asp-for="MotherName" class="form-control" />
+                        </div>
+
+                        <div class="col-md-3">
+                            <label asp-for="MotherQualification" class="form-label">Mother’s Qualification</label>
+                            <input asp-for="MotherQualification" class="form-control" />
+                        </div>
+
+                        <div class="col-md-3">
+                            <label asp-for="MotherIncome" class="form-label">Mother’s Income</label>
+                            <input asp-for="MotherIncome" class="form-control" />
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="FatherName" class="form-label">Father’s Name</label>
+                            <input asp-for="FatherName" class="form-control" />
+                        </div>
+
+                        <div class="col-md-3">
+                            <label asp-for="FatherQualification" class="form-label">Father’s Qualification</label>
+                            <input asp-for="FatherQualification" class="form-control" />
+                        </div>
+
+                        <div class="col-md-3">
+                            <label asp-for="FatherIncome" class="form-label">Father’s Income</label>
+                            <input asp-for="FatherIncome" class="form-control" />
+                        </div>
+
+
+                        <div class="col-md-3">
+                            <label asp-for="GuardianName" class="form-label">Guardian Name</label>
+                            <input asp-for="GuardianName" class="form-control" />
+                        </div>
+
+                        <div class="col-md-3">
+                            <label asp-for="Nationality" class="form-label">Nationality</label>
+                            <input asp-for="Nationality" value="INDIAN" class="form-control" />
+                        </div>
+                        <div class="col-md-3">
+                            <label asp-for="Religion" class="form-label">Religion</label>
+                            <select asp-for="Religion" class="form-select">
+                                <option>HINDU</option>
+                                <option>MUSLIM</option>
+                                <option>SIKH</option>
+                                <option>CHRISTIAN</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label asp-for="CasteCategory" class="form-label">Caste Category</label>
+                            <select asp-for="CasteCategory" class="form-select">
+                                <option value="GENERAL">GENERAL</option>
+                                <option value="OBC">OBC</option>
+                                <option value="SC">SC</option>
+                                <option value="ST">ST</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ADDRESS INFO -->
+                <div class="tab-pane fade" id="address" role="tabpanel">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label asp-for="PermAddress" class="form-label">Permanent Address</label>
+                            <textarea asp-for="PermAddress" class="form-control"></textarea>
+                        </div>
+                        <div class="col-md-3">
+                            <label asp-for="PermCity" class="form-label">City</label>
+                            <input asp-for="PermCity" class="form-control" />
+                        </div>
+                        <div class="col-md-3">
+                            <label asp-for="PermPIN" class="form-label">PIN</label>
+                            <input asp-for="PermPIN" class="form-control" />
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="form-check mt-2">
+                                <input asp-for="IsCorrAddressSameAsPerm" class="form-check-input" type="checkbox" id="sameAddressChk" />
+                                <label class="form-check-label" for="sameAddressChk">Correspondence Address same as Permanent</label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="CorrAddress" class="form-label">Correspondence Address</label>
+                            <textarea asp-for="CorrAddress" class="form-control"></textarea>
+                        </div>
+                        <div class="col-md-3">
+                            <label asp-for="CorrCity" class="form-label">City</label>
+                            <input asp-for="CorrCity" class="form-control" />
+                        </div>
+                        <div class="col-md-3">
+                            <label asp-for="CorrPIN" class="form-label">PIN</label>
+                            <input asp-for="CorrPIN" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ACADEMIC -->
+                <div class="tab-pane fade" id="academic" role="tabpanel">
+                    <div class="row g-3">
+                        <div class="col-md-2">
+                            <label asp-for="AcademicYear" class="form-label">Academic Year</label>
+                            <input asp-for="AcademicYear" class="form-control" />
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="SchoolName" class="form-label">Previous School</label>
+                            <input asp-for="SchoolName" class="form-control" />
+                        </div>
+                        <div class="col-md-2">
+                            <label asp-for="PreviousClass" class="form-label">Previous Class</label>
+                            <input asp-for="PreviousClass" class="form-control" />
+                        </div>
+                        <div class="col-md-2">
+                            <label asp-for="Result" class="form-label">Result</label>
+                            <input asp-for="Result" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FEE INFO -->
+                <div class="tab-pane fade" id="fee" role="tabpanel">
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <label asp-for="FeeCategory" class="form-label">Fee Category</label>
+                            <select asp-for="FeeCategory" class="form-select" asp-items="ViewBag.FeeCat">
+                                <option value="">-- Select Fee Category --</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label asp-for="SpecialCase" class="form-label">Special Case</label>
+                            <input asp-for="SpecialCase" class="form-control" />
+                        </div>
+                        <div class="col-md-3">
+                            <label asp-for="StudentQuota" class="form-label">Student Quota</label>
+                            <input asp-for="StudentQuota" class="form-control" />
+                        </div>
+                        <div class="col-md-3">
+                            <label asp-for="SMSNo" class="form-label">SMS Number</label>
+                            <input asp-for="SMSNo" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PHOTOS -->
+                <div class="tab-pane fade" id="photo" role="tabpanel">
+                    <div class="row g-4 text-center">
+                        <div class="col-md-4">
+                            <label class="form-label">Student Photo</label>
+                            <input asp-for="StudentPhoto" type="file" class="form-control" />
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Father Photo</label>
+                            <input asp-for="FatherPhoto" type="file" class="form-control" />
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Mother Photo</label>
+                            <input asp-for="MotherPhoto" type="file" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="text-center mt-4">
+                <button type="submit" class="btn btn-success px-4 me-2">💾 Save</button>
+                <a asp-action="Index" class="btn btn-secondary px-4">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Copy permanent to correspondence
+        document.getElementById("sameAddressChk").addEventListener("change", function () {
+            if (this.checked) {
+                document.getElementById("CorrAddress").value = document.getElementById("PermAddress").value;
+                document.getElementById("CorrCity").value = document.getElementById("PermCity").value;
+                document.getElementById("CorrPIN").value = document.getElementById("PermPIN").value;
+            }
+        });
+
+
+
+
+                document.getElementById("dob").addEventListener("change", function () {
+            const dateInput = this.value;
+            if (!dateInput) return;
+
+            const date = new Date(dateInput);
+
+            const day = date.getDate();
+            const month = date.toLocaleString('en', { month: 'long' });
+            const year = date.getFullYear();
+
+            const dayWords = numberToOrdinalWords(day);
+            const yearWords = numberToWords(year);
+
+            const dobInWords = `${dayWords} ${month} ${yearWords}`;
+            document.getElementById("dobWords").value = dobInWords;
+        });
+
+        function numberToWords(num) {
+            const ones = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine",
+                "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen",
+                "Seventeen", "Eighteen", "Nineteen"];
+            const tens = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
+
+            if (num < 20) return ones[num];
+            if (num < 100) return tens[Math.floor(num / 10)] + (num % 10 ? " " + ones[num % 10] : "");
+            if (num < 1000) return ones[Math.floor(num / 100)] + " Hundred" + (num % 100 ? " " + numberToWords(num % 100) : "");
+            if (num < 1000000) return numberToWords(Math.floor(num / 1000)) + " Thousand" + (num % 1000 ? " " + numberToWords(num % 1000) : "");
+            return "";
+        }
+
+        function numberToOrdinalWords(n) {
+            const ordinals = {
+                1: "First", 2: "Second", 3: "Third", 4: "Fourth", 5: "Fifth", 6: "Sixth",
+                7: "Seventh", 8: "Eighth", 9: "Ninth", 10: "Tenth", 11: "Eleventh",
+                12: "Twelfth", 13: "Thirteenth", 14: "Fourteenth", 15: "Fifteenth",
+                16: "Sixteenth", 17: "Seventeenth", 18: "Eighteenth", 19: "Nineteenth",
+                20: "Twentieth", 21: "Twenty-First", 22: "Twenty-Second", 23: "Twenty-Third",
+                24: "Twenty-Fourth", 25: "Twenty-Fifth", 26: "Twenty-Sixth",
+                27: "Twenty-Seventh", 28: "Twenty-Eighth", 29: "Twenty-Ninth", 30: "Thirtieth",
+                31: "Thirty-First"
+            };
+            return ordinals[n] || "";
+        }
+
+
+
+
+
+
+
+    </script>
+}

@@ -1,0 +1,107 @@
+﻿@model School_ErP.Models.OldBalance
+
+@{
+    ViewData["Title"] = "Edit Old Balance Entry";
+}
+
+<div class="container mt-4">
+    <h4 class="text-primary mb-3" style="color:orange">Edit Old Balance Entry</h4>
+    <a asp-action="OldBList" class="btn btn-primary btn-sm"> +Old Blance List </a>
+
+    <form asp-action="EditOldB" method="post" class="shadow p-4 bg-light rounded">
+		<input type="hidden" asp-for="Id" />
+        <div class="row mb-3">
+
+            <div class="col-md-3">
+                <label class="form-label">Reg No</label>
+                <input asp-for="RegNo" id="RegNo" class="form-control" />
+                <span asp-validation-for="RegNo" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-4">
+                <label>Class</label>
+                <input id="ClassName" class="form-control" readonly />
+            </div>
+
+            <div class="col-md-4">
+                <label>Section</label>
+                <input id="Section" class="form-control" readonly />
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <label>Father Name</label>
+                <input id="FatherName" class="form-control" readonly />
+            </div>
+
+            <div class="col-md-4">
+                <label>Contact No</label>
+                <input id="ContactNo" class="form-control" readonly />
+            </div>
+
+            <div class="col-md-4">
+                <label>Old Session</label>
+                <select asp-for="B_Session" class="form-control dropdown-menu-dark">
+                    <option value="2024-2025">2024-2025</option>
+                    <option value="2023-2024">2023-2024</option>
+                </select>
+
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <label>Balance Amount</label>
+                <input asp-for="BalanceAmount" class="form-control" />
+                <span asp-validation-for="BalanceAmount" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-8">
+                <label>Remark</label>
+                <textarea asp-for="Remark" class="form-control"></textarea>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-success">Save</button>
+        <a asp-action="OldBList" class="btn btn-secondary">Back</a>
+    </form>
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $("#RegNo").on("change", function () {
+            var regNo = $(this).val();
+            if (regNo) {
+                $.getJSON('/Fee/GetStudentInfo?regNo=' + regNo, function (data) {
+                    if (data) {
+                        $("#ClassName").val(data.className);
+                        $("#Section").val(data.section);
+                        $("#FatherName").val(data.fatherName);
+                        $("#ContactNo").val(data.contactNo);
+                    } else {
+                        alert("No student found with this RegNo.");
+                        $("#ClassName, #Section, #FatherName, #ContactNo").val('');
+                    }
+                });
+            }
+        });
+
+               $(document).ready(function () {
+            var regNo = $("#RegNo").val();
+            if (regNo) {
+                $.getJSON('/Fee/GetStudentInfo?regNo=' + regNo, function (data) {
+                    if (data) {
+                        $("#ClassName").val(data.className);
+                        $("#Section").val(data.section);
+                        $("#FatherName").val(data.fatherName);
+                        $("#ContactNo").val(data.contactNo);
+                    } else {
+                        $("#ClassName, #Section, #FatherName, #ContactNo").val('');
+                    }
+                });
+            }
+        });
+    </script>
+}

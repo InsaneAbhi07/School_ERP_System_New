@@ -1,0 +1,109 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="row g-4">
+    <!-- Card 1 -->
+    <div class="col-md-3">
+        <div class="card dashboard-card shadow-sm border-0">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-muted">Students</h6>
+                        <h3>1,240</h3>
+                    </div>
+                    <i class="fa fa-users fa-2x text-primary"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="col-md-3">
+        <div class="card dashboard-card shadow-sm border-0">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-muted">Staff</h6>
+                        <h3>56</h3>
+                    </div>
+                    <i class="fa fa-user-tie fa-2x text-success"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="col-md-3">
+        <div class="card dashboard-card shadow-sm border-0">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-muted">Fees Collected</h6>
+                        <h3>₹2.5L</h3>
+                    </div>
+                    <i class="fa fa-wallet fa-2x text-warning"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Card 4 -->
+    <div class="col-md-3">
+        <div class="card dashboard-card shadow-sm border-0">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-muted">Pending Fees</h6>
+                        <h3>₹65K</h3>
+                    </div>
+                    <i class="fa fa-exclamation-circle fa-2x text-danger"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<hr class="my-4" />
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-white">
+                <strong>Recent Admissions</strong>
+            </div>
+            <div class="card-body">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Class</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>1</td><td>Rohan Kumar</td><td>10th</td><td>23-Oct-2025</td></tr>
+                        <tr><td>2</td><td>Anita Singh</td><td>9th</td><td>22-Oct-2025</td></tr>
+                        <tr><td>3</td><td>Vivek Sharma</td><td>8th</td><td>21-Oct-2025</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-white">
+                <strong>Notices</strong>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled">
+                    <li>📅 PTM scheduled on 28 Oct</li>
+                    <li>🎓 Exams start from 2 Nov</li>
+                    <li>🏆 Annual Day on 15 Nov</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

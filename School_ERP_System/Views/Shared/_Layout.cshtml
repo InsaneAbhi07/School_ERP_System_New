@@ -1,0 +1,226 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - School ERP Dashboard</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/dashboard.css" asp-append-version="true" />
+</head>
+
+<body>
+    <div class="wrapper">
+        <!-- ===== Sidebar ===== -->
+        <nav class="sidebar" id="sidebar">
+            <div class="logo">
+                <li><a asp-controller="Home" asp-action="Index" class="fa-solid fa-school"><span class="text-muted" style="font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif">School ERP</span></a></li>
+
+            </div>
+
+            <ul class="sidebar-menu">
+ 
+                <li class="sidebar-dropdown">
+                    <a href="#"><i class="fa-solid fa-globe"></i> Masters <i class="fa-solid fa-chevron-down dropdown-icon"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a asp-controller="Master" asp-action="SchoolList">School Info</a></li>
+                        <li><a asp-controller="Master" asp-action="ClassList">Master Class</a></li>
+                        <li><a asp-controller="Master" asp-action="SectionList">Master Section</a></li>
+                        <li><a asp-controller="Master" asp-action="HouseList">Master House</a></li>
+                        <li><a asp-controller="Master" asp-action="StreamList">Master Stream</a></li>
+                        <li><a asp-controller="Master" asp-action="FeeCatList">Master Fee Category</a></li>
+                    </ul>
+                </li>
+
+                 <li class="sidebar-dropdown">
+                    <a href="#"><i class="fa-solid fa-graduation-cap"></i> Student Section <i class="fa-solid fa-chevron-down dropdown-icon"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Prospectus</a></li>
+                        <li><a asp-controller="StudentSection" asp-action="AddRegistration">Student Registration</a></li>
+                        <li><a asp-controller="StudentSection" asp-action="StList">Student List</a></li>
+                        <li><a href="#">Scholarship Fee Setup</a></li>
+                    </ul>
+                </li>
+
+                <li class="sidebar-dropdown">
+                    <a href="#"><i class="fa-solid fa-money-check-dollar"></i> Fees Section <i class="fa-solid fa-chevron-down dropdown-icon"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a asp-controller="Fee" asp-action="TakeOldBalance">Old Balance Entry</a></li>
+                        <li><a asp-controller="Fee" asp-action="OldBList">Old Balance List</a></li>
+                        <li><a asp-controller="Fee" asp-action="FeeDeposite">Fee Deposite</a></li>
+                        <li><a asp-controller="Fee" asp-action="FeeDepositeList">Fee Deposite List</a></li>
+                        <li><a href="#">School Receipt</a></li>
+                    </ul>
+                </li>
+
+                <li class="sidebar-dropdown">
+                    <a href="#"><i class="fa-sharp fa-regular fa-receipt"></i> Report Section <i class="fa-solid fa-chevron-down dropdown-icon"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Classwise Due Report</a></li>
+                        <li><a href="#">Daily Report</a></li>
+                        <li><a href="#">Full Fee Submit Report</a></li>
+                        <li><a href="#">Old Balance Report</a></li>
+                        <li><a href="#">Headwise School Receipt Report</a></li>
+                        <li><a href="#">Ledger Report</a></li>
+                        <li><a href="#">Monthly Report</a></li>
+                        <li><a href="#">No Fee Submit Report</a></li>
+                        <li><a href="#">Only One Installment Paid Report</a></li>
+                        <li><a href="#">School Receipt Report</a></li>
+                        <li><a href="#">Single Student Fee Report</a></li>
+                        <li><a href="#">Special Case St. Report</a></li>
+                        <li><a href="#">Discount Report</a></li>
+                        <li><a href="#">Scholarship Report</a></li>
+                    </ul>
+                </li>
+
+                 <li class="sidebar-dropdown">
+                    <a href="#"><i class="fa-solid fa-book"></i> Examination Section <i class="fa-solid fa-chevron-down dropdown-icon"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Exam Marks Entry / Excel</a></li>
+                        <li><a href="#">Additional Marks</a></li>
+                        <li><a href="#">Additional Grades Marks</a></li>
+                    </ul>
+                </li>
+
+                <li class="sidebar-dropdown">
+                    <a href="#"><i class="fa-duotone fa-solid fa-books"></i> Certificate Section <i class="fa-solid fa-chevron-down dropdown-icon"></i></a>
+
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Birth Certificate</a></li>
+                        <li><a href="#">Character Certificate</a></li>
+                        <li><a href="#">Transfer Certificate</a></li>
+                    </ul>
+                </li>
+
+                 <li class="sidebar-dropdown">
+                    <a href="#"><i class="fa-solid fa-user-tie"></i> Admin Section <i class="fa-solid fa-chevron-down dropdown-icon"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">School Expense</a></li>
+                        <li><a href="#">User Permission</a></li>
+                    </ul>
+                </li>
+
+                <li class="sidebar-dropdown">
+                    <a href="#"><i class="fa-brands fa-amazon-pay"></i> Payroll Section <i class="fa-solid fa-chevron-down dropdown-icon"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Master Employee</a></li>
+                        <li><a href="#">Give Arrer/Advance</a></li>
+                        <li><a href="#">Leave Assign</a></li>
+                        <li><a href="#"> Payroll Generation</a></li>
+                    </ul>
+                </li>
+
+                <li class="sidebar-dropdown">
+                    <a href="#"><i class="fa-solid fa-key"></i> Change Password<i class="fa-solid fa-chevron-down dropdown-icon"></i></a>
+                </li>
+
+                <li class="sidebar-dropdown">
+                    <a style="align-items:center">LogOut</a>
+                </li>
+
+            </ul>
+        </nav>
+
+        <!-- ===== Main Content ===== -->
+        <div class="main-content">
+            <!-- Top Navbar -->
+            <div class="top-navbar">
+                <button class="btn-toggle" id="toggle-btn"><i class="fa-solid fa-bars"></i></button>
+                <h5 class="mb-0">Welcome, Admin</h5>
+                <div>
+                    <a href="#" class="text-secondary me-3">Session : 2025-2026</a>
+                    <a href="#" class="text-secondary me-3"><i class="fa-solid fa-bell"></i></a>
+                    <a href="#" class="text-secondary"><i class="fa-solid fa-user-circle"></i></a>
+                </div>
+            </div>
+
+            <!-- Content -->
+            <div class="content-area">
+                <main role="main" class="pb-3">
+                    @RenderBody()
+                </main>
+            </div>
+
+            <!-- Footer -->
+            <footer>
+                &copy; 2025 - School ERP Dashboard | Designed by Abhi 👨‍💻
+            </footer>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Sidebar toggle
+        const toggleBtn = document.getElementById('toggle-btn');
+        const sidebar = document.getElementById('sidebar');
+        toggleBtn.addEventListener('click', () => { sidebar.classList.toggle('collapsed'); });
+
+        // Dropdown toggle
+        document.addEventListener('DOMContentLoaded', () => {
+            const dropdowns = document.querySelectorAll('.sidebar-dropdown > a');
+            dropdowns.forEach(drop => {
+                drop.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const parent = this.parentElement;
+                    parent.classList.toggle('active');
+                    parent.parentElement.querySelectorAll('.sidebar-dropdown').forEach(item => {
+                        if(item !== parent) item.classList.remove('active');
+                    });
+                });
+            });
+        });
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.8/js/dataTables.bootstrap5.min.js"></script>
+
+
+    <script>
+        const toggleBtn = document.querySelector('.btn-toggle');
+        const sidebar = document.querySelector('.sidebar');
+        const mainContent = document.querySelector('.main-content');
+
+        toggleBtn.addEventListener('click', () => {
+            // Desktop toggle (collapse)
+            if (window.innerWidth > 992) {
+                sidebar.classList.toggle('collapsed');
+                if (sidebar.classList.contains('collapsed')) {
+                    mainContent.style.marginLeft = '70px';
+                } else {
+                    mainContent.style.marginLeft = '250px';
+                }
+            } else {
+                // Mobile toggle (slide in/out)
+                sidebar.classList.toggle('show');
+            }
+        });
+
+        // Hide sidebar when clicking outside on mobile
+        document.addEventListener('click', (e) => {
+            if (window.innerWidth <= 992 && !sidebar.contains(e.target) && !toggleBtn.contains(e.target)) {
+                sidebar.classList.remove('show');
+            }
+        });
+    </script>
+
+
+
+</body>
+</html>

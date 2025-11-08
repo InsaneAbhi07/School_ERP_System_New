@@ -1,0 +1,117 @@
+﻿@model School_ErP.Models.Master_School
+@{
+    ViewData["Title"] = Model.Id == 0 ? "Add School" : "Edit School";
+}
+<head>
+    <style>
+        /* ===== Form Styling (ERP Look) ===== */
+        .card-header {
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #e1e5ea;
+        }
+
+        .form-label {
+            font-size: 13px;
+            color: #334155;
+        }
+
+        .form-control-sm {
+            font-size: 13px;
+            border-radius: 6px;
+            border: 1px solid #d1d5db;
+        }
+
+            .form-control-sm:focus {
+                border-color: #007bff;
+                box-shadow: 0 0 0 0.15rem rgba(0, 123, 255, 0.15);
+            }
+
+        .btn-primary.btn-sm {
+            background: linear-gradient(90deg, #0061f2, #007bff);
+            border: none;
+            font-size: 13px;
+            padding: 6px 12px;
+            border-radius: 6px;
+        }
+
+        .btn-outline-secondary.btn-sm {
+            font-size: 13px;
+            padding: 6px 12px;
+            border-radius: 6px;
+        }
+
+    </style>
+</head>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+<div class="container mt-4">
+    <div class="card shadow border-0">
+        <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center border-bottom">
+            <h6 class="fw-bold text-primary m-0">
+                <i class="fa fa-school me-2"></i>
+                @(Model.Id == 0 ? "Add New School" : "Edit School Details")
+            </h6>
+            <a asp-action="SchoolList" class="btn btn-sm btn-outline-secondary">
+                <i class="fa fa-arrow-left"></i> Back to List
+            </a>
+        </div>
+
+        <div class="card-body">
+            <form asp-action="@(Model.Id == 0 ? "CreateSchool" : "EditSchool")" method="post" class="needs-validation" novalidate>
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label asp-for="SCode" class="form-label fw-semibold">School Code</label>
+                        <input asp-for="SCode" class="form-control form-control-sm" placeholder="Enter School Code" />
+                        <span asp-validation-for="SCode" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-8">
+                        <label asp-for="SName" class="form-label fw-semibold">School Name</label>
+                        <input asp-for="SName" class="form-control form-control-sm" placeholder="Enter School Name" />
+                        <span asp-validation-for="SName" class="text-danger small"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="City" class="form-label fw-semibold">City</label>
+                        <input asp-for="City" class="form-control form-control-sm" placeholder="Enter City" />
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="State" class="form-label fw-semibold">State</label>
+                        <input asp-for="State" class="form-control form-control-sm" placeholder="Enter State" />
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="Phone" class="form-label fw-semibold">Phone</label>
+                        <input asp-for="Phone" class="form-control form-control-sm" placeholder="Enter Phone" />
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="Email" class="form-label fw-semibold">Email</label>
+                        <input asp-for="Email" class="form-control form-control-sm" placeholder="Enter Email" />
+                    </div>
+
+                    <div class="col-md-12">
+                        <label asp-for="Address" class="form-label fw-semibold">Address</label>
+                        <textarea asp-for="Address" class="form-control form-control-sm" rows="2" placeholder="Enter Address"></textarea>
+                    </div>
+                </div>
+
+                <div class="mt-4 text-end">
+                    <button type="submit" class="btn btn-primary btn-sm me-2">
+                        <i class="fa fa-save me-1"></i> Save
+                    </button>
+                    <a asp-action="SchoolList" class="btn btn-outline-secondary btn-sm">
+                        <i class="fa fa-times me-1"></i> Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
