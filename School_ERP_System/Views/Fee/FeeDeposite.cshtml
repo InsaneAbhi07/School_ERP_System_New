@@ -1,0 +1,338 @@
+﻿@model School_ErP.Models.FeeDeposite
+@{
+    ViewData["Title"] = "New Fee Deposite";
+    var months = new List<string> {
+        "April", "May", "June", "July", "August", "September",
+        "October", "November", "December", "January", "February", "March"
+    };
+}
+<head>
+    <style>
+        /* Compact grid look */
+        #tblMonthFee {
+            border-color: #dee2e6 !important;
+        }
+
+            #tblMonthFee th, #tblMonthFee td {
+                padding: 4px 6px !important;
+                vertical-align: middle !important;
+                border-color: #e2e3e5 !important;
+            }
+
+            /* Hover + selection look */
+            #tblMonthFee tbody tr:hover {
+                background-color: #f1f5ff !important;
+                transition: 0.2s;
+            }
+
+            #tblMonthFee .form-check-input {
+                transform: scale(1.1);
+                cursor: pointer;
+            }
+
+            /* Selected Row highlight */
+            #tblMonthFee tbody tr.selected-row {
+                background-color: #e6f9e8 !important;
+                font-weight: 600;
+            }
+
+    </style>
+</head>
+<div class="container mt-4">
+    <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-header bg-light fw-bold d-flex justify-content-between align-items-center">
+            <h5 class="mb-0" style="color:maroon">New Fee Deposite</h5>
+            <a asp-action="FeeDepositeList" class="btn btn-outline-secondary btn-sm rounded-pill">Back</a>
+        </div>
+
+        <div class="card-body">
+            <form asp-action="FeeDeposite" id="feeForm">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <!-- Student Info -->
+                <div class="row g-3 mb-3">
+
+                    <div class="col-md-2">
+                        <label asp-for="EntryDate" class="form-label fw-semibold"></label>
+                        <input asp-for="EntryDate" type="date" id="EntryDate" class="form-control rounded-pill" />
+                    </div>
+
+                   
+                    <div class="col-md-2">
+                        <label asp-for="ReceiptNo" class="form-label fw-semibold"></label>
+                        <input asp-for="ReceiptNo" class="form-control rounded-pill" placeholder="Receipt No" readonly />
+                    </div>
+
+                    <div class="col-md-2">
+                        <label class="form-label fw-semibold">Reg. No</label>
+                        <input asp-for="Regno" class="form-control rounded-pill" id="txtRegNo" placeholder="Enter Reg. No" />
+                    </div>
+
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-semibold">Student Name</label>
+                        <input type="text" class="form-control rounded-pill bg-light" id="txtName" readonly />
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">Father Name</label>
+                        <input type="text" class="form-control rounded-pill bg-light" id="txtFather" readonly />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label fw-semibold">Class</label>
+                        <input type="text" class="form-control rounded-pill bg-light" id="txtClass" readonly />
+                    </div>
+
+                    <div class="col-md-2">
+                        <label class="form-label fw-semibold">Section</label>
+                        <input type="text" class="form-control rounded-pill bg-light" id="txtSection" readonly />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label fw-semibold">Contact No.</label>
+                        <input type="number" class="form-control rounded-pill bg-light" id="txtContact" readonly />
+                    </div>
+
+                    <div class="col-md-2">
+                        <label class="form-label fw-semibold">Fee Category</label>
+                        <input type="text" class="form-control rounded-pill bg-light" id="txtCategory" readonly />
+                    </div>
+                </div>
+
+                <hr>
+                <!-- Fee Details -->
+                <div class="card-header bg-light fw-bold fw-bold d-flex justify-content-between align-items-lg-start">
+                <h5 class="mb-0" style="color:maroon">Select Months/Installment</h5>
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <h6 class="fw-bold text-primary mb-2">
+                            <i class="bi bi-table me-2"></i>Monthly Fee Details
+                        </h6>
+
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped text-center align-middle shadow-sm rounded-3"
+                                   id="tblMonthFee" style="font-size: 0.82rem; border-radius: 8px; overflow: hidden;">
+                                <thead class="table-light" style="background-color: #f7f8fa;">
+                                    <tr style="font-size: 0.78rem; text-transform: uppercase;">
+                                        <th style="width:5%">#</th>
+                                        <th style="width:20%">Month</th>
+                                        <th style="width:25%">Installment</th>
+                                        <th style="width:15%">Amount (₹)</th>
+                                        <th style="width:10%">Select</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Data dynamically inserted here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="row g-3">
+                <div class="col-md-2">
+                    <label class="form-label fw-semibold">Total Amount</label>
+                    <input asp-for="Total" class="form-control rounded-pill" readonly/>
+                </div>
+
+                    <div class="col-md-2">
+                        <label asp-for="PayMode" class="form-label fw-semibold"></label>
+                        <select asp-for="PayMode" id="ddlPayMode" class="form-select rounded-pill">
+                            <option value="">Select</option>
+                            <option>Cash</option>
+                            <option>Cheque</option>
+                            <option>Online</option>
+                        </select>
+                    </div>
+
+                      <!-- Dynamic Section: Based on PayMode -->
+                <div id="cashFields" class="row g-3 mt-2 d-none">
+                    <div class="col-md-3">
+                        <label asp-for="Amount" class="form-label fw-semibold">Cash Amount</label>
+                        <input asp-for="Amount" class="form-control rounded-pill" placeholder="Enter Cash Amount" />
+                    </div>
+
+                     <div class="col-md-6">
+                    <label class="form-label fw-semibold">Fee Recv. - Bank Name</label>
+                    <select asp-for="Bank" class="form-select rounded-pill">
+                        <option value="IOB">IOB</option>
+                        <option value="SBI">SBI</option>
+                    </select>
+                </div>
+
+                </div>
+
+                <div id="chequeFields" class="row g-3 mt-2 d-none">
+                    <div class="col-md-2">
+                        <label class="form-label fw-semibold">Cheque No.</label>
+                        <input type="text" class="form-control rounded-pill" id="ChequeNo" name="ChequeNo" placeholder="Enter Cheque No." />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label fw-semibold">Cheque Date</label>
+                        <input type="date" class="form-control rounded-pill" id="ChequeDate" name="ChequeDate" />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label fw-semibold">Cheque Amount</label>
+                        <input type="number" class="form-control rounded-pill" id="ChequeAmount" name="ChequeAmount" placeholder="Enter Amount" />
+                    </div>
+
+                        <div class="col-md-6">
+                        <label class="form-label fw-semibold">Cheque Bank</label>
+                        <input type="text" class="form-control rounded-pill" id="ChequeBank" name="Bank" placeholder="Enter Bank Name" />
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Fee Recv. - Bank Name</label>
+                            <select asp-for="Bank" class="form-select rounded-pill">
+                                <option value="IOB">IOB</option>
+                                <option value="SBI">SBI</option>
+                            </select>
+                        </div>
+
+                </div>
+
+                <div id="onlineFields" class="row g-3 mt-2 d-none">
+                    <div class="col-md-2">
+                        <label class="form-label fw-semibold">Transaction No.</label>
+                        <input type="text" class="form-control rounded-pill" id="TransNo" name="TransNo" placeholder="Enter Transaction No." />
+                    </div>
+                    <div class="col-md-2">
+                        <label class="form-label fw-semibold">Amount</label>
+                        <input asp-for="Amount" class="form-control rounded-pill" placeholder="Enter Amount" />
+                    </div>
+
+                     <div class="col-md-6">
+                    <label class="form-label fw-semibold">Fee Recv. - Bank Name</label>
+                    <select asp-for="Bank" class="form-select rounded-pill">
+                        <option value="IOB">IOB</option>
+                        <option value="SBI">SBI</option>
+                    </select>
+                </div>
+
+                </div>
+
+                </div>
+               
+              
+
+                <div class="row g-3 mt-2">
+                    <div class="col-md-12">
+                        <label asp-for="Remark" class="form-label fw-semibold"></label>
+                        <textarea asp-for="Remark" rows="2" class="form-control rounded-3" placeholder="Remarks..."></textarea>
+                    </div>
+                </div>
+
+                <div class="text-end mt-4">
+                    <button type="submit" class="btn btn-success rounded-pill px-4">💾 Save</button>
+                    <a asp-action="FeeDepositeList" class="btn btn-outline-secondary rounded-pill px-4">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+              document.getElementById("txtRegNo").addEventListener("change", function () {
+            var regNo = this.value.trim();
+            if (regNo === "") return;
+
+            debugger;
+
+            fetch(`/Fee/GetStudentByRegNo?regNo=${regNo}`)
+                .then(res => res.json())
+                .then(data => {
+                    debugger;
+                    if (data.success && data.data) {
+                        document.getElementById("txtName").value = data.data.studentName || "";
+                        document.getElementById("txtFather").value = data.data.fatherName || "";
+                        document.getElementById("txtClass").value = data.data.currentClass || "";
+                        document.getElementById("txtSection").value = data.data.section || "";
+                        document.getElementById("txtContact").value = data.data.smsno || "";
+                        document.getElementById("txtCategory").value = data.data.feeCategory || "";
+                        
+                        loadMonthFeeGrid(data.data.currentClass);
+
+                    } else {
+                        alert(data.message || "Student not found!");
+                        document.querySelectorAll("#txtName, #txtFather, #txtClass, #txtSection, #txtContact, #txtCategory").forEach(i => i.value = "");
+                    }
+                })
+                .catch(err => console.error("Error fetching student data:", err));
+        });
+
+        // 🔹 Show/Hide PayMode specific fields
+        document.getElementById("ddlPayMode").addEventListener("change", function () {
+            const mode = this.value;
+            document.getElementById("cashFields").classList.add("d-none");
+            document.getElementById("chequeFields").classList.add("d-none");
+            document.getElementById("onlineFields").classList.add("d-none");
+
+            if (mode === "Cash") {
+                document.getElementById("cashFields").classList.remove("d-none");
+            } else if (mode === "Cheque") {
+                document.getElementById("chequeFields").classList.remove("d-none");
+            } else if (mode === "Online") {
+                document.getElementById("onlineFields").classList.remove("d-none");
+            }
+        });
+
+                // 🔹 Set today's date by default in EntryDate field
+        document.addEventListener("DOMContentLoaded", function () {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById("EntryDate").value = today;
+        });
+
+                function loadMonthFeeGrid(className) {
+            fetch(`/Fee/GetMonthFeeByClass?className=${className}`)
+                .then(res => res.json())
+                .then(data => {
+                    const tbody = document.querySelector("#tblMonthFee tbody");
+                    tbody.innerHTML = ""; // Clear old data
+
+                    if (data.success && data.data.length > 0) {
+                        data.data.forEach(row => {
+                            const tr = document.createElement("tr");
+                                   tr.innerHTML = `
+                        <td>${row.srNo}</td>
+                        <td>${row.monthName}</td>
+                        <td>${row.installment}</td>
+                        <td>${row.amount}</td>
+                        <td>
+                            <input type="checkbox" class="form-check-input select-month" data-amount="${row.amount}" />
+                        </td>
+                    `;
+                            tbody.appendChild(tr);
+                        });
+                    } else {
+                        tbody.innerHTML = `<tr><td colspan="4" class="text-danger">No fee data found for this class.</td></tr>`;
+                    }
+                })
+                .catch(err => console.error("Error loading month fee:", err));
+        }
+
+         document.addEventListener("change", function (e) {
+            if (e.target.classList.contains("select-month")) {
+                let total = 0;
+
+                document.querySelectorAll(".select-month").forEach(cb => {
+                    const row = cb.closest("tr");
+                    if (cb.checked) {
+                        total += parseFloat(cb.dataset.amount) || 0;
+                        row.classList.add("selected-row");
+                    } else {
+                        row.classList.remove("selected-row");
+                    }
+                });
+
+                document.querySelector("[name='Total']").value = total.toFixed(2);
+            }
+        });
+
+
+
+    </script>
+}

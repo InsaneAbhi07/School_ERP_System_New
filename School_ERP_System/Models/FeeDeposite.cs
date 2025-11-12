@@ -46,6 +46,7 @@ namespace School_ErP.Models
         public string ChequeNo { get; set; }
 
         public string ChequeDate { get; set; }
+        public string ChequeBank{ get; set; }
         public string Bank { get; set; }  
 
         public string Remark { get; set; }
