@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using School_ErP.Models;
 using School_ErP.Web.Data;
+using School_ERP_System.Models;
 
 namespace School_ErP.Controllers
 {
@@ -112,22 +114,48 @@ namespace School_ErP.Controllers
         {
             var model = new FeeDeposite();
             model.ReceiptNo = GenerateNextReceiptNo();
+            //model.Regno = GetStudentByRegNo(string Regno);
             return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> FeeDeposite(FeeDeposite model)
+        public async Task<IActionResult> FeeDeposite(FeeDeposite model, string SelectedMonthsData)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(model);
                 await _context.SaveChangesAsync();
+
+                // Step 4: Parse JSON & Save Month-wise details
+                if (!string.IsNullOrEmpty(SelectedMonthsData))
+                {
+                    var months = System.Text.Json.JsonSerializer.Deserialize<List<MonthFeeVM>>(SelectedMonthsData);
+                    model.Session = "2025-26";
+                    model.Sid = 0;
+
+                    foreach (var m in months)
+                    {
+                        var detail = new FeeDepositeDetail
+                        {
+
+                            FeeDepositeId = model.Id,
+                            Month = m.Month,
+                            Installment = m.Installment,
+                            Amount = m.Amount
+                        };
+                        _context.Add(detail);
+                    }
+                    await _context.SaveChangesAsync();
+                }
+
                 TempData["msg"] = "Record added successfully!";
                 return RedirectToAction(nameof(FeeDepositeList));
             }
-            return View(model);
+
+             return View(model);
         }
+
 
         // GET: Edit
         public async Task<IActionResult> EditFeeDeposite(int? id)

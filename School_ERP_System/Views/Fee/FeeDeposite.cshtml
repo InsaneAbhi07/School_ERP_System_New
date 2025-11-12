@@ -1,10 +1,6 @@
 ﻿@model School_ErP.Models.FeeDeposite
 @{
     ViewData["Title"] = "New Fee Deposite";
-    var months = new List<string> {
-        "April", "May", "June", "July", "August", "September",
-        "October", "November", "December", "January", "February", "March"
-    };
 }
 <head>
     <style>
@@ -44,6 +40,8 @@
             <h5 class="mb-0" style="color:maroon">New Fee Deposite</h5>
             <a asp-action="FeeDepositeList" class="btn btn-outline-secondary btn-sm rounded-pill">Back</a>
         </div>
+
+        <input type="hidden" id="SelectedMonthsData" name="SelectedMonthsData" />
 
         <div class="card-body">
             <form asp-action="FeeDeposite" id="feeForm">
@@ -114,7 +112,7 @@
                                    id="tblMonthFee" style="font-size: 0.82rem; border-radius: 8px; overflow: hidden;">
                                 <thead class="table-light" style="background-color: #f7f8fa;">
                                     <tr style="font-size: 0.78rem; text-transform: uppercase;">
-                                        <th style="width:5%">#</th>
+                                        <th style="width:5%">Sr No.</th>
                                         <th style="width:20%">Month</th>
                                         <th style="width:25%">Installment</th>
                                         <th style="width:15%">Amount (₹)</th>
@@ -150,8 +148,8 @@
                       <!-- Dynamic Section: Based on PayMode -->
                 <div id="cashFields" class="row g-3 mt-2 d-none">
                     <div class="col-md-3">
-                        <label asp-for="Amount" class="form-label fw-semibold">Cash Amount</label>
-                        <input asp-for="Amount" class="form-control rounded-pill" placeholder="Enter Cash Amount" />
+                        <label asp-for="CashAmt" class="form-label fw-semibold">Cash Amount</label>
+                        <input asp-for="CashAmt" class="form-control rounded-pill" placeholder="Enter Cash Amount" />
                     </div>
 
                      <div class="col-md-6">
@@ -198,10 +196,7 @@
                         <label class="form-label fw-semibold">Transaction No.</label>
                         <input type="text" class="form-control rounded-pill" id="TransNo" name="TransNo" placeholder="Enter Transaction No." />
                     </div>
-                    <div class="col-md-2">
-                        <label class="form-label fw-semibold">Amount</label>
-                        <input asp-for="Amount" class="form-control rounded-pill" placeholder="Enter Amount" />
-                    </div>
+               
 
                      <div class="col-md-6">
                     <label class="form-label fw-semibold">Fee Recv. - Bank Name</label>
@@ -314,23 +309,83 @@
                 .catch(err => console.error("Error loading month fee:", err));
         }
 
-         document.addEventListener("change", function (e) {
+
+                  // 🔹 Checkbox change event
+        document.addEventListener("change", function (e) {
             if (e.target.classList.contains("select-month")) {
                 let total = 0;
+                let selectedMonths = []; // <-- ye define karna zaruri hai
 
+                // Calculate total & collect selected months
                 document.querySelectorAll(".select-month").forEach(cb => {
                     const row = cb.closest("tr");
+                    const month = row.children[1].innerText;
+                    const installment = row.children[2].innerText;
+                    const amount = parseFloat(cb.dataset.amount) || 0;
+
                     if (cb.checked) {
-                        total += parseFloat(cb.dataset.amount) || 0;
+                        total += amount;
                         row.classList.add("selected-row");
+
+                        selectedMonths.push({
+                            Month: month,
+                            Installment: installment,
+                            Amount: amount
+                        });
                     } else {
                         row.classList.remove("selected-row");
                     }
                 });
 
-                document.querySelector("[name='Total']").value = total.toFixed(2);
+                // Set total value in Total textbox
+                const totalInput = document.querySelector("[name='Total'], #Total");
+                if (totalInput) totalInput.value = total.toFixed(2);
+
+                // Update PayMode-related fields automatically
+                updatePayModeAmounts(total);
+
+                // Convert selected months to JSON & store in hidden field
+                const hiddenField = document.getElementById("SelectedMonthsData");
+                if (hiddenField) hiddenField.value = JSON.stringify(selectedMonths);
             }
         });
+
+        // 🔹 Pay Mode change event
+        document.getElementById("ddlPayMode").addEventListener("change", function () {
+            const total = parseFloat(document.querySelector("[name='Total'], #Total")?.value || 0);
+            updatePayModeAmounts(total);
+        });
+
+        // 🔹 Function to update Cash/Cheque/Online fields
+        function updatePayModeAmounts(total) {
+            const mode = document.getElementById("ddlPayMode").value;
+            const cashAmt = document.querySelector("[name='CashAmt'], #CashAmt");
+            const chequeAmt = document.querySelector("[name='ChequeAmount'], #ChequeAmount");
+            const transNo = document.getElementById("TransNo");
+
+            // Reset values
+            if (cashAmt) cashAmt.value = "";
+            if (chequeAmt) chequeAmt.value = "";
+            if (transNo) transNo.value = "";
+
+            // Apply values based on mode
+            if (mode === "Cash") {
+                if (cashAmt) cashAmt.value = total.toFixed(2);
+                if (chequeAmt) chequeAmt.value = 0;
+            }
+            else if (mode === "Cheque") {
+                if (chequeAmt) chequeAmt.value = total.toFixed(2);
+                if (cashAmt) cashAmt.value = 0;
+            }
+            else if (mode === "Online") {
+                if (cashAmt) cashAmt.value = total.toFixed(2); // using CashAmt for online
+                if (chequeAmt) chequeAmt.value = 0;
+            }
+        }
+
+
+
+
 
 
 
