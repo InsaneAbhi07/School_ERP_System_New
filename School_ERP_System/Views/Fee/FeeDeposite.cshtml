@@ -41,11 +41,12 @@
             <a asp-action="FeeDepositeList" class="btn btn-outline-secondary btn-sm rounded-pill">Back</a>
         </div>
 
-        <input type="hidden" id="SelectedMonthsData" name="SelectedMonthsData" />
 
         <div class="card-body">
             <form asp-action="FeeDeposite" id="feeForm">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <input type="hidden" id="SelectedMonthsData" name="SelectedMonthsData" />
 
                 <!-- Student Info -->
                 <div class="row g-3 mb-3">
@@ -192,11 +193,10 @@
                 </div>
 
                 <div id="onlineFields" class="row g-3 mt-2 d-none">
-                    <div class="col-md-2">
-                        <label class="form-label fw-semibold">Transaction No.</label>
-                        <input type="text" class="form-control rounded-pill" id="TransNo" name="TransNo" placeholder="Enter Transaction No." />
-                    </div>
-               
+                        <div class="col-md-2">
+                            <label class="form-label fw-semibold">Transaction No.</label>
+                            <input type="text" class="form-control rounded-pill" id="TransNo" name="TransNo" placeholder="Enter Transaction No." />
+                        </div>
 
                      <div class="col-md-6">
                     <label class="form-label fw-semibold">Fee Recv. - Bank Name</label>
@@ -207,21 +207,30 @@
                 </div>
 
                 </div>
-
                 </div>
-               
-              
+
 
                 <div class="row g-3 mt-2">
-                    <div class="col-md-12">
+                <div class="col-md-2">
+                    <label class="form-label fw-semibold">Late Fee</label>
+                    <input type="text" class="form-control rounded-pill" id="Late" name="Late" value="0.00"/>
+                </div>
+
+                <div class="col-md-2">
+                    <label class="form-label fw-semibold">Concession</label>
+                    <input type="text" class="form-control rounded-pill" id="Concession" name="Concession" value="0.00" />
+                </div>
+
+                 <div class="col-md-12">
                         <label asp-for="Remark" class="form-label fw-semibold"></label>
                         <textarea asp-for="Remark" rows="2" class="form-control rounded-3" placeholder="Remarks..."></textarea>
                     </div>
                 </div>
 
                 <div class="text-end mt-4">
-                    <button type="submit" class="btn btn-success rounded-pill px-4">💾 Save</button>
+                    <button type="submit" class="btn btn-success rounded-pill px-4" onclick="prepareSelectedMonths()">💾 Save</button>
                     <a asp-action="FeeDepositeList" class="btn btn-outline-secondary rounded-pill px-4">Cancel</a>
+
                 </div>
             </form>
         </div>
@@ -275,6 +284,34 @@
             }
         });
 
+
+        document.querySelector("form").addEventListener("submit", function (e) {
+            const selectedMonths = [];
+            document.querySelectorAll(".select-month:checked").forEach(chk => {
+                const row = chk.closest("tr");
+                const month = row.cells[1].innerText.trim();
+                const installment = row.cells[2].innerText.trim();
+                const amount = parseFloat(chk.getAttribute("data-amount")) || 0;
+
+                selectedMonths.push({
+                    Month: month,
+                    Installment: installment,
+                    Amount: amount
+                });
+            });
+
+            if (selectedMonths.length === 0) {
+                alert("Please select at least one month or installment!");
+                e.preventDefault(); // stop form from submitting
+                return;
+            }
+
+            // Put JSON string into hidden field
+            document.getElementById("SelectedMonthsData").value = JSON.stringify(selectedMonths);
+        });
+
+         
+
                 // 🔹 Set today's date by default in EntryDate field
         document.addEventListener("DOMContentLoaded", function () {
             const today = new Date().toISOString().split('T')[0];
@@ -297,7 +334,8 @@
                         <td>${row.installment}</td>
                         <td>${row.amount}</td>
                         <td>
-                            <input type="checkbox" class="form-check-input select-month" data-amount="${row.amount}" />
+                        <input type="checkbox" name="SelectedMonths" value="${row.monthName}"
+                        class="form-check-input select-month" data-amount="${row.amount}" />
                         </td>
                     `;
                             tbody.appendChild(tr);
@@ -383,11 +421,20 @@
             }
         }
 
+        document.addEventListener("DOMContentLoaded", function () {
+            const selectedMonths = @Html.Raw(ViewBag.SelectedMonths ?? "[]");
 
-
-
-
-
+            // if data present, tick corresponding checkboxes
+            selectedMonths.forEach(item => {
+                document.querySelectorAll(".select-month").forEach(chk => {
+                    const row = chk.closest("tr");
+                    const monthName = row.cells[1].innerText.trim();
+                    if (monthName === item.Month) {
+                        chk.checked = true;
+                    }
+                });
+            });
+        });
 
     </script>
 }

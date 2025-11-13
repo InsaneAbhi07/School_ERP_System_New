@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using School_ErP.Models;
 using School_ErP.Web.Data;
 using School_ERP_System.Models;
+using Newtonsoft.Json;
 
 namespace School_ErP.Controllers
 {
@@ -106,84 +107,197 @@ namespace School_ErP.Controllers
 
         public IActionResult FeeDepositeList()
         {
-            var feedepo= _context.Tbl_FeeDeposite.Where(x=>x.Cancel!="0").ToList(); 
+            var feedepo = _context.Tbl_FeeDeposite
+                                  .Where(x => x.Cancel != "0")
+                                  .GroupBy(x => x.ReceiptNo)
+                                  .Select(g => new FeeReceiptSummaryVM
+                                  {
+                                      ReceiptNo = g.Key,
+                                      EntryDate = g.Min(x => x.EntryDate),
+                                      Regno = g.FirstOrDefault().Regno,
+                                      PayMode = g.FirstOrDefault().PayMode,
+                                      Amount = g.Sum(x => x.Amount),
+                                      Remark = g.FirstOrDefault().Remark,
+                                      User = g.FirstOrDefault().User
+                                  })
+                                  .ToList();
+
             return View(feedepo);
-        }
+         }
 
         public IActionResult FeeDeposite()
         {
             var model = new FeeDeposite();
             model.ReceiptNo = GenerateNextReceiptNo();
             //model.Regno = GetStudentByRegNo(string Regno);
-            return View(model);
+
+                        return View(model);
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> FeeDeposite(FeeDeposite model, string SelectedMonthsData)
+        public IActionResult FeeDeposite(FeeDeposite model, string SelectedMonthsData)
         {
-            if (ModelState.IsValid)
+            try
             {
-                _context.Add(model);
-                await _context.SaveChangesAsync();
-
-                // Step 4: Parse JSON & Save Month-wise details
-                if (!string.IsNullOrEmpty(SelectedMonthsData))
+                if (string.IsNullOrEmpty(SelectedMonthsData))
                 {
-                    var months = System.Text.Json.JsonSerializer.Deserialize<List<MonthFeeVM>>(SelectedMonthsData);
-                    model.Session = "2025-26";
-                    model.Sid = 0;
-
-                    foreach (var m in months)
-                    {
-                        var detail = new FeeDepositeDetail
-                        {
-
-                            FeeDepositeId = model.Id,
-                            Month = m.Month,
-                            Installment = m.Installment,
-                            Amount = m.Amount
-                        };
-                        _context.Add(detail);
-                    }
-                    await _context.SaveChangesAsync();
+                    TempData["Error"] = "Please select at least one month or installment.";
+                    return RedirectToAction("FeeDeposite");
                 }
 
-                TempData["msg"] = "Record added successfully!";
-                return RedirectToAction(nameof(FeeDepositeList));
-            }
+                var selectedMonths = JsonConvert.DeserializeObject<List<SelectedMonthModel>>(SelectedMonthsData);
 
-             return View(model);
+                foreach (var month in selectedMonths)
+                {
+                    var obj = new FeeDeposite
+                    {
+                        EntryDate = model.EntryDate,
+                        ReceiptNo = model.ReceiptNo,
+                        Regno = model.Regno,
+                        PayMode = model.PayMode,
+                        Bank = model.Bank,
+                        CashAmt = model.CashAmt,
+                        ChequeAmt = model.ChequeAmt,
+                        ChequeNo = model.ChequeNo,
+                        ChequeDate = model.ChequeDate,
+                        ChequeBank = model.ChequeBank,
+                        Remark = model.Remark,
+                        Total = model.Total,
+                        Late = model.Late,
+                        Concession = model.Concession,
+                        Amount = month.Amount,
+                        Mon = month.Month,
+                        Month = month.Month,
+                        FeeHead = month.Installment,
+                    };
+
+                    _context.Tbl_FeeDeposite.Add(obj);
+                }
+
+                _context.SaveChanges();
+                TempData["Success"] = "Fee deposited successfully!";
+                return RedirectToAction("FeeDepositeList");
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Error: " + ex.Message;
+                return RedirectToAction("FeeDeposite");
+            }
         }
 
+        public class SelectedMonthModel
+        {
+            public string Month { get; set; }
+            public string Installment { get; set; }
+            public decimal Amount { get; set; }
+        }
 
         // GET: Edit
-        public async Task<IActionResult> EditFeeDeposite(int? id)
+        [HttpGet]
+        public IActionResult EditFeeDeposite(string receiptNo)
         {
-            if (id == null) return NotFound();
-            var data = await _context.Tbl_FeeDeposite.FindAsync(id);
-            if (data == null) return NotFound();
-            return View(data);
-        }
+            if (string.IsNullOrEmpty(receiptNo))
+                return RedirectToAction("FeeDepositeList");
 
-        // POST: Edit
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditFeeDeposite(int id, FeeDeposite model)
-        {
-            if (id != model.Id) return NotFound();
+            var data = _context.Tbl_FeeDeposite
+                .Where(x => x.ReceiptNo == receiptNo)
+                .ToList();
 
-            if (ModelState.IsValid)
+            if (data == null || data.Count == 0)
             {
-                _context.Update(model);
-                await _context.SaveChangesAsync();
-                TempData["msg"] = "Record updated successfully!";
-                return RedirectToAction(nameof(FeeDepositeList));
+                TempData["Error"] = "No data found for this receipt.";
+                return RedirectToAction("FeeDepositeList");
             }
-            return View(model);
+
+            // fill basic info from first record
+            var model = new FeeDeposite
+            {
+                ReceiptNo = data.First().ReceiptNo,
+                Regno = data.First().Regno,
+                PayMode = data.First().PayMode,
+                Bank = data.First().Bank,
+                CashAmt = data.First().CashAmt,
+                ChequeAmt = data.First().ChequeAmt,
+                ChequeNo = data.First().ChequeNo,
+                ChequeDate = data.First().ChequeDate,
+                ChequeBank = data.First().ChequeBank,
+                Remark = data.First().Remark,
+                Total = data.First().Total,
+                Late = data.First().Late,
+                Concession = data.First().Concession,
+                EntryDate = data.First().EntryDate
+            };
+
+            // Prepare selected months
+            var selectedMonths = data.Select(x => new SelectedMonthModel
+            {
+                Month = x.Month,
+                Installment = x.FeeHead,
+                Amount = x.Amount
+            }).ToList();
+
+            ViewBag.SelectedMonths = JsonConvert.SerializeObject(selectedMonths);
+            GetStudentByRegNo(model.Regno);
+            return View("FeeDeposite", model);
         }
 
-        // GET: Delete
+
+        [HttpPost]
+        public IActionResult EditFeeDeposite(FeeDeposite model, string SelectedMonthsData)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(SelectedMonthsData))
+                {
+                    TempData["Error"] = "Please select at least one month or installment.";
+                    return RedirectToAction("EditFeeDeposite", new { receiptNo = model.ReceiptNo });
+                }
+
+                var selectedMonths = JsonConvert.DeserializeObject<List<SelectedMonthModel>>(SelectedMonthsData);
+
+                // delete old months for this receipt
+                var oldRecords = _context.Tbl_FeeDeposite.Where(x => x.ReceiptNo == model.ReceiptNo).ToList();
+                _context.Tbl_FeeDeposite.RemoveRange(oldRecords);
+
+                // insert new
+                foreach (var month in selectedMonths)
+                {
+                    var obj = new FeeDeposite
+                    {
+                        EntryDate = model.EntryDate,
+                        ReceiptNo = model.ReceiptNo,
+                        Regno = model.Regno,
+                        PayMode = model.PayMode,
+                        Bank = model.Bank,
+                        CashAmt = model.CashAmt,
+                        ChequeAmt = model.ChequeAmt,
+                        ChequeNo = model.ChequeNo,
+                        ChequeDate = model.ChequeDate,
+                        ChequeBank = model.ChequeBank,
+                        Remark = model.Remark,
+                        Total = model.Total,
+                        Late = model.Late,
+                        Concession = model.Concession,
+                        Amount = month.Amount,
+                        Mon = month.Month,
+                        Month = month.Month,
+                        FeeHead = month.Installment,
+                    };
+
+                    _context.Tbl_FeeDeposite.Add(obj);
+                }
+
+                _context.SaveChanges();
+                TempData["Success"] = "Fee record updated successfully!";
+                return RedirectToAction("FeeDepositeList");
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Error: " + ex.Message;
+                return RedirectToAction("EditFeeDeposite", new { receiptNo = model.ReceiptNo });
+            }
+        }
+
         public async Task<IActionResult> DeleteFeeD(int? id)
         {
             if (id == null) return NotFound();
@@ -204,6 +318,8 @@ namespace School_ErP.Controllers
             return RedirectToAction(nameof(FeeDepositeList));
         }
 
+
+        //----////////////
         [HttpGet]
         public async Task<IActionResult> GetStudentByRegNo(string regNo)
             {

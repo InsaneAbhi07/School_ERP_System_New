@@ -1,4 +1,6 @@
-﻿@model IEnumerable<School_ErP.Models.FeeDeposite>
+﻿@* @model IEnumerable<School_ErP.Models.FeeDeposite> *@
+@model IEnumerable<FeeReceiptSummaryVM>
+
 
 <head>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
@@ -49,11 +51,11 @@
                             <td>@s.PayMode</td>
                             <td>@s.Remark</td>
                             <td class="text-center">
-                                <a asp-action="EditFee" asp-route-id="@s.Id"
-                                   class="btn btn-warning btn-sm me-2" title="Edit">
-                                    <i class="fa fa-edit"></i>
+                                 
+                                <a href="@Url.Action("EditFeeDeposite", "Fee", new { receiptNo = s.ReceiptNo })"
+                                   class="btn btn-sm btn-warning">
+                                    Edit
                                 </a>
-
                                 <button type="button" class="btn btn-info btn-sm text-white me-2 btn-details"
                                         data-id="@s.Id" title="View">
                                     <i class="fa fa-eye"></i>
